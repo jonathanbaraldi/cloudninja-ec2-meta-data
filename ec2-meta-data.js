@@ -43,7 +43,7 @@ app.get('/',function(req,res){
         });
         res2.on('end', function () {
             console.log(data);
-            result = data;
+            resultMetaData(data);
         });
     });
     request.on('error', function (e) {
@@ -51,19 +51,24 @@ app.get('/',function(req,res){
     });
     request.end();
 
-    var body = '<html>'
-        +'  <head>'
-        +'  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>'
-        +'  </head>'
-        +'  <body>'
-        +   result
-        +'  </body>'
-         +'</html>';
-    
-    res.writeHead(200,{"Content-Type" : "text/html"});
-    res.write(body);
-    res.end();
 
+
+    var resultMetaData = function(metaData){
+
+        var body = '<html>'
+            +'  <head>'
+            +'  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>'
+            +'  </head>'
+            +'  <body>'
+            +   metaData
+            +'  </body>'
+             +'</html>';
+        
+        res.writeHead(200,{"Content-Type" : "text/html"});
+        res.write(body);
+        res.end();
+    }
+    
 });
 
 app.listen(8080,function(){
