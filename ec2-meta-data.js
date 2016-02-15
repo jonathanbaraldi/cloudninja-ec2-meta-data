@@ -16,21 +16,6 @@ app.use(bodyParser.urlencoded({
 // AWS
 
 
-var options = {
-  host: '169.254.169.254',
-  port: 80,
-  path: '/latest/'
-};
-
-http.get(options, function(res) {
-    console.log("Got response: " + res.statusCode);
-    console.log(res);
-}).on('error', function(e) {
-    console.log("Got error: " + e.message);
-});
-
-
-
 
 // Configuração da requisição, cabeçalhos, etc. CORS
 app.use(function(req, res, next) {
@@ -44,19 +29,20 @@ app.use(function(req, res, next) {
 // GET
 app.get('/',function(req,res){
 
-    var params = {
-      Bucket: 'cloudninja-jon', 
-      Key: 'arquivo.txt'
+    var options = {
+      host: '169.254.169.254',
+      port: 80,
+      path: '/latest/'
     };
-    s3.getObject(params, function(err, data) {
-        if (err) {
-            returnS3(err);
-            console.log(err);
-        } else {
-            returnS3(data);
-            console.log(data);
-        }
+
+    http.get(options, function(res) {
+        console.log("Got response: " + res.statusCode);
+        returnS3(res);
+    }).on('error', function(e) {
+        returnS3(e.message);
+        console.log("Got error: " + e.message);
     });
+
 
     var returnS3 = function(result){
         // result = JSON.stringify(result);
