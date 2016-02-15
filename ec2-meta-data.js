@@ -3,6 +3,8 @@ var AWS = require('aws-sdk');
 var express = require('express'); 
 var app = express();
 
+var http = require('http');
+
 var bodyParser = require('body-parser');
 
 // Parsear o conteudo
@@ -12,19 +14,23 @@ app.use(bodyParser.urlencoded({
 }));
 
 // AWS
-var s3 = new AWS.S3();
 
-var metaData = new AWS.MetadataService();
 
-console.log(metaData);
+var options = {
+  host: '169.254.169.254',
+  port: 80,
+  path: '/latest/'
+};
 
-metaData.request('public-ip', function(err, data){
-    if (err) {
-        console.log(err);
-    } else {
-        console.log(data);
-    }
+http.get(options, function(res) {
+    console.log("Got response: " + res.statusCode);
+    console.log(res);
+}).on('error', function(e) {
+    console.log("Got error: " + e.message);
 });
+
+
+
 
 // Configuração da requisição, cabeçalhos, etc. CORS
 app.use(function(req, res, next) {
