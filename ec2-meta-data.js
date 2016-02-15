@@ -56,7 +56,7 @@ app.get('/',function(req,res){
   		    +	result
   		    +'	</body>'
   	         +'</html>';
-        console.log(container);
+        console.log(result);
         res.writeHead(200,{"Content-Type" : "text/html"});
         res.write(body);
         res.end();
