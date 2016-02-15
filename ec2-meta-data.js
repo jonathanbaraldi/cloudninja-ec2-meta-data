@@ -31,11 +31,6 @@ app.get('/',function(req,res){
 
     var options = {
       host: '169.254.169.254',
-      path: '/latest/meta-data/'
-    };
-
-    var options = {
-      host: '169.254.169.254',
       path: '/latest/meta-data/',
       method: 'GET'
     };
