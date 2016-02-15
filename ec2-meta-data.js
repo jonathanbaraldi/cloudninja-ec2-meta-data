@@ -31,37 +31,46 @@ app.get('/',function(req,res){
 
     var options = {
       host: '169.254.169.254',
-      port: 80,
       path: '/latest/meta-data/'
     };
 
-    http.get(options, function(res) {
-        console.log("Got response: " + res.statusCode);
-        returnS3(res);
-    }).on('error', function(e) {
-        returnS3(e.message);
-        console.log("Got error: " + e.message);
-    });
+    var options = {
+      host: '169.254.169.254',
+      path: '/latest/meta-data/',
+      method: 'GET'
+    };
 
+    var req = http.request(options, function(res) {
+      console.log('STATUS: ' + res.statusCode);
+      console.log('HEADERS: ' + JSON.stringify(res.headers));
+      res.setEncoding('utf8');
+      
+      res.on('data', function (chunk) {
+        
+        console.log('BODY: ' + chunk);
 
-    var returnS3 = function(result){
-        
-        // result = JSON.stringify(result);
-        
-        // var container = result.Body.toString();
         var body = '<html>'
-  		    +'	<head>'
-  		    +'	<meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>'
-  		    +'	</head>'
-  		    +'	<body>'
-  		    +	result
-  		    +'	</body>'
-  	         +'</html>';
-        console.log(result);
+            +'  <head>'
+            +'  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>'
+            +'  </head>'
+            +'  <body>'
+            +   chunk
+            +'  </body>'
+             +'</html>';
+        
         res.writeHead(200,{"Content-Type" : "text/html"});
         res.write(body);
         res.end();
-    }
+
+
+
+      });
+    });
+
+    req.on('error', function(e) {
+      console.log('problem with request: ' + e.message);
+    });
+
 	
 });
 
