@@ -29,44 +29,41 @@ app.use(function(req, res, next) {
 // GET
 app.get('/',function(req,res){
 
+    var result;
+
     var options = {
-      host: '169.254.169.254',
-      path: '/latest/meta-data/',
-      method: 'GET'
-    };
-
-    var req = http.request(options, function(res) {
-      console.log('STATUS: ' + res.statusCode);
-      console.log('HEADERS: ' + JSON.stringify(res.headers));
-      res.setEncoding('utf8');
-      
-      res.on('data', function (chunk) {
-        
-        console.log('BODY: ' + chunk);
-
-        var body = '<html>'
-            +'  <head>'
-            +'  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>'
-            +'  </head>'
-            +'  <body>'
-            +   chunk
-            +'  </body>'
-             +'</html>';
-        
-        res.writeHead(200,{"Content-Type" : "text/html"});
-        res.write(body);
-        res.end();
-
-
-
-      });
+        host: '169.254.169.254',
+        // path: '/latest/meta-data/'
+        path: '/latest/meta-data/public-ipv4'
+    }
+    var request = http.request(options, function (res2) {
+        var data = '';
+        res2.on('data', function (chunk) {
+            data += chunk;
+        });
+        res2.on('end', function () {
+            console.log(data);
+            result = data;
+        });
     });
-
-    req.on('error', function(e) {
-      console.log('problem with request: ' + e.message);
+    request.on('error', function (e) {
+        console.log(e.message);
     });
+    request.end();
 
-	
+    var body = '<html>'
+        +'  <head>'
+        +'  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>'
+        +'  </head>'
+        +'  <body>'
+        +   result
+        +'  </body>'
+         +'</html>';
+    
+    res.writeHead(200,{"Content-Type" : "text/html"});
+    res.write(body);
+    res.end();
+
 });
 
 app.listen(8080,function(){
