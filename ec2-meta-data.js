@@ -32,7 +32,7 @@ app.get('/',function(req,res){
     var options = {
       host: '169.254.169.254',
       port: 80,
-      path: '/latest/'
+      path: '/latest/meta-data/'
     };
 
     http.get(options, function(res) {
@@ -45,7 +45,8 @@ app.get('/',function(req,res){
 
 
     var returnS3 = function(result){
-        result = JSON.stringify(result);
+        
+        // result = JSON.stringify(result);
         
         // var container = result.Body.toString();
         var body = '<html>'
