@@ -46,13 +46,14 @@ app.get('/',function(req,res){
 
     var returnS3 = function(result){
         // result = JSON.stringify(result);
-        var container = result.Body.toString();
+        
+        // var container = result.Body.toString();
         var body = '<html>'
   		    +'	<head>'
   		    +'	<meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>'
   		    +'	</head>'
   		    +'	<body>'
-  		    +	container
+  		    +	result
   		    +'	</body>'
   	         +'</html>';
         console.log(container);
