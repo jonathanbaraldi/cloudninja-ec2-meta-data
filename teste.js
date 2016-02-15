@@ -1,12 +1,22 @@
 var http = require('http');
 
-var client = http.createClient(80, "169.254.169.254/latest/meta-data");
-request = client.request();
-request.on('response', function( res ) {
-    res.on('data', function( data ) {
-        console.log( data.toString());
-    } );
-} );
+var options = {
+    host: '169.254.169.254',
+    path: '/latest/meta-data/'
+}
+var request = http.request(options, function (res) {
+    var data = '';
+    res.on('data', function (chunk) {
+        data += chunk;
+    });
+    res.on('end', function () {
+        console.log(data);
+
+    });
+});
+request.on('error', function (e) {
+    console.log(e.message);
+});
 request.end();
 
 
