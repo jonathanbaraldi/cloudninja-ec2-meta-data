@@ -1,10 +1,7 @@
 // Dependencias
-var AWS = require('aws-sdk');
 var express = require('express'); 
 var app = express();
-
 var http = require('http');
-
 var bodyParser = require('body-parser');
 
 // Parsear o conteudo
@@ -12,10 +9,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-
-// AWS
-
-
 
 // Configuração da requisição, cabeçalhos, etc. CORS
 app.use(function(req, res, next) {
@@ -29,13 +22,13 @@ app.use(function(req, res, next) {
 // GET
 app.get('/',function(req,res){
 
-    var result;
-
+    // Instance Meta-data
     var options = {
         host: '169.254.169.254',
         // path: '/latest/meta-data/'
-        path: '/latest/meta-data/public-ipv4'
+        path: '/latest/meta-data/public-ipv4'  // Iremos pegar o IP PUBLICO DA NOSSA INSTANCIA
     }
+
     var request = http.request(options, function (res2) {
         var data = '';
         res2.on('data', function (chunk) {
@@ -52,7 +45,6 @@ app.get('/',function(req,res){
     request.end();
 
 
-
     var resultMetaData = function(metaData){
 
         var body = '<html>'
@@ -60,6 +52,7 @@ app.get('/',function(req,res){
             +'  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8"/>'
             +'  </head>'
             +'  <body>'
+            +' O Public IP da sua instância EC2: ' 
             +   metaData
             +'  </body>'
              +'</html>';
