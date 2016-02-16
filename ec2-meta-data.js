@@ -57,6 +57,7 @@ app.get('/',function(req,res){
             +'  </body>'
              +'</html>';
         
+        console.log(' O Public IP da sua instância EC2: '+metaData);
         res.writeHead(200,{"Content-Type" : "text/html"});
         res.write(body);
         res.end();
